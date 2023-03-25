@@ -1,5 +1,6 @@
 import {
 	appendInitialChild,
+	Container,
 	createInstance,
 	createTextInstance
 } from 'hostConfig'
@@ -18,7 +19,8 @@ export const completeWork = (wip: FiberNode) => {
 				// update
 			} else {
 				// 1. 构建 DOM
-				const instance = createInstance(wip.type, newProps)
+				// const instance = createInstance(wip.type, newProps)
+				const instance = createInstance(wip.type)
 				// 2. 将 DOM 插入到 DOM 树中
 				appendAllChildren(instance, wip)
 				wip.stateNode = instance
@@ -46,7 +48,7 @@ export const completeWork = (wip: FiberNode) => {
 	}
 }
 
-function appendAllChildren(parent: FiberNode, wip: FiberNode) {
+function appendAllChildren(parent: Container, wip: FiberNode) {
 	let node = wip.child
 	while (node !== null) {
 		if (node.tag === HostComponent || node.tag === HostText) {
