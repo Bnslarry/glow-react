@@ -72,8 +72,8 @@ function completeUnitOfWork(fiber: FiberNode) {
 	let node: FiberNode | null = fiber
 	do {
 		completeWork(node)
-		const sibling = node.sibling
 
+		const sibling = node.sibling
 		if (sibling !== null) {
 			workInProgress = sibling
 			return
@@ -99,8 +99,8 @@ function commitRoot(root: FiberRootNode) {
 
 	// 判断是否存在3个子阶段需要执行的操作
 	const subtreeHasEffects =
-		(finishedWork.subtrssFlags & MutationMask) !== NoFlags
-	const rootHasEffects = (finishedWork.subtrssFlags & MutationMask) !== NoFlags
+		(finishedWork.subtreeFlags & MutationMask) !== NoFlags
+	const rootHasEffects = (finishedWork.flags & MutationMask) !== NoFlags
 
 	if (subtreeHasEffects || rootHasEffects) {
 		// beforeMutation

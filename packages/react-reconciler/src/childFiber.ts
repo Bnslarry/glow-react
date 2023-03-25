@@ -28,7 +28,7 @@ function ChildReconciler(shouldTrackEffects: boolean) {
 
 	function placeSingleChild(fiber: FiberNode) {
 		if (shouldTrackEffects && fiber.alternate === null) {
-			fiber.flags != Placement
+			fiber.flags |= Placement
 		}
 		return fiber
 	}

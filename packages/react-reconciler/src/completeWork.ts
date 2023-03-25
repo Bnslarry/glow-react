@@ -20,7 +20,7 @@ export const completeWork = (wip: FiberNode) => {
 
 	switch (wip.tag) {
 		case HostComponent:
-			if (current !== null && wip.stateNode) {
+			if (current !== null && current.stateNode) {
 				// update
 			} else {
 				// 1. 构建 DOM
@@ -33,7 +33,7 @@ export const completeWork = (wip: FiberNode) => {
 			bubbleProperties(wip)
 			return null
 		case HostText:
-			if (current !== null && wip.stateNode) {
+			if (current !== null && current.stateNode) {
 				// update
 			} else {
 				// 1. 构建 DOM
@@ -43,6 +43,7 @@ export const completeWork = (wip: FiberNode) => {
 			bubbleProperties(wip)
 			return null
 		case HostRoot:
+			bubbleProperties(wip)
 			return null
 		case FunctionComponent:
 			bubbleProperties(wip)
@@ -60,7 +61,7 @@ function appendAllChildren(parent: Container, wip: FiberNode) {
 	let node = wip.child
 	while (node !== null) {
 		if (node.tag === HostComponent || node.tag === HostText) {
-			appendInitialChild(parent, node?.stateNode)
+			appendInitialChild(node?.stateNode, parent)
 		} else if (node.child !== null) {
 			node.child.return = node
 			node = node.child
@@ -81,15 +82,15 @@ function appendAllChildren(parent: Container, wip: FiberNode) {
 }
 
 function bubbleProperties(wip: FiberNode) {
-	let subtrssFlags = NoFlags
+	let subtreeFlags = NoFlags
 	let child = wip.child
 
 	while (child !== null) {
-		subtrssFlags |= child.subtrssFlags
-		subtrssFlags |= child.flags
+		subtreeFlags |= child.subtreeFlags
+		subtreeFlags |= child.flags
 
 		child.return = wip
 		child = child.sibling
 	}
-	wip.subtrssFlags |= subtrssFlags
+	wip.subtreeFlags |= subtreeFlags
 }

@@ -13,7 +13,7 @@ export const commitMutationEffects = (finishedWork: FiberNode) => {
 		const child: FiberNode | null = nextEffect.child
 
 		if (
-			(nextEffect.subtrssFlags & MutationMask) !== NoFlags &&
+			(nextEffect.subtreeFlags & MutationMask) !== NoFlags &&
 			child !== null
 		) {
 			nextEffect = child
@@ -35,7 +35,6 @@ export const commitMutationEffects = (finishedWork: FiberNode) => {
 
 const commitMutationEffectsOnFiber = (finishedWork: FiberNode) => {
 	const flags = finishedWork.flags
-
 	if ((flags & Placement) !== NoFlags) {
 		commitPlacement(finishedWork)
 		finishedWork.flags &= ~Placement
