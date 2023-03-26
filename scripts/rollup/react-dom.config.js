@@ -14,7 +14,25 @@ export default [
 		output: [
 			{
 				file: `${pkgDistPath}/index.js`,
-				name: 'index.js',
+				name: 'ReactDOM',
+				format: 'umd'
+			},
+			{
+				file: `${pkgDistPath}/client.js`,
+				name: 'client',
+				format: 'umd'
+			}
+		],
+		external: [...Object.keys(peerDependencies)],
+		plugins: [getBaseRollupPlugins()]
+	},
+	// react-test-utils
+	{
+		input: `${pkgPath}/test-utils.ts`,
+		output: [
+			{
+				file: `${pkgDistPath}/test-utils.js`,
+				name: 'testUtils',
 				format: 'umd'
 			},
 			{
@@ -23,7 +41,7 @@ export default [
 				format: 'umd'
 			}
 		],
-		external: [...Object.keys(peerDependencies)],
+		external: ['react-dom', 'react'],
 		plugins: [
 			...getBaseRollupPlugins(),
 			// webpack resolve alias
