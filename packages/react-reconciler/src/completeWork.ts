@@ -4,6 +4,7 @@ import {
 	createInstance,
 	createTextInstance
 } from 'hostConfig'
+import { updateFiberProps } from 'react-dom/src/SyntheticEvent'
 import { FiberNode } from './fiber'
 import { NoFlags, Update } from './fiberFlags'
 import {
@@ -26,10 +27,16 @@ export const completeWork = (wip: FiberNode) => {
 		case HostComponent:
 			if (current !== null && current.stateNode) {
 				// update
+				// props 是否变化
+				// 变化时标记 Update flag
+				updateFiberProps(wip.stateNode, newProps)
+				// TODO work
+				// className style 等的变化判断
 			} else {
+				// mount
 				// 1. 构建 DOM
 				// const instance = createInstance(wip.type, newProps)
-				const instance = createInstance(wip.type)
+				const instance = createInstance(wip.type, newProps)
 				// 2. 将 DOM 插入到 DOM 树中
 				appendAllChildren(instance, wip)
 				wip.stateNode = instance
@@ -39,7 +46,7 @@ export const completeWork = (wip: FiberNode) => {
 		case HostText:
 			if (current !== null && current.stateNode) {
 				// update
-				const oldText = current.memoizedProps.content
+				const oldText = current.memoizedProps?.content
 				const newText = newProps.content
 				if (oldText !== newText) {
 					markUpdate(wip)
